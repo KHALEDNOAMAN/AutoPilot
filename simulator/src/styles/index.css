@@ -1,0 +1,67 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  font-family: 'Outfit', sans-serif;
+  background-color: #0f0f1a;
+  color: #ecf0f1;
+}
+
+canvas {
+  display: block;
+}
+
+.hud-panel {
+  position: absolute;
+  background: rgba(26, 26, 46, 0.8);
+  backdrop-filter: blur(8px);
+  border: 1px solid #2d2d4a;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.dashboard {
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.info-panel {
+  top: 20px;
+  right: 20px;
+  width: 250px;
+}
+
+.controls-help {
+  bottom: 20px;
+  left: 20px;
+}
+
+.minimap {
+  top: 20px;
+  left: 20px;
+  width: 150px;
+  height: 112px;
+}
+
+.autopilot-badge {
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: #2c3e50;
+  transition: all 0.3s ease;
+}
+.autopilot-badge.active {
+  background: #27ae60;
+  box-shadow: 0 0 10px #27ae60;
+}
+
+.sensor-bar {
+  height: 8px;
+  background: #27ae60;
+  border-radius: 4px;
+  margin-top: 4px;
+}
