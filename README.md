@@ -6,6 +6,14 @@
 
 An autonomous vehicle system combining computer vision, path planning, and PID control. Features real ESP32 firmware and an interactive 2D web simulator.
 
+## Overview
+
+AutoPilot is an autonomous vehicle system that combines computer vision, path planning, and control theory to enable self-driving capabilities. Built as both a real ESP32-based RC car controller and an interactive 2D simulator, it demonstrates the complete autonomous driving pipeline from raw camera input to motor actuation.
+
+The project covers fundamental ADAS (Advanced Driver Assistance Systems) concepts that are used in production self-driving vehicles, scaled down to an educational platform.
+
+---
+
 ## Key Features
 
 - **Lane Detection:** Utilizes Canny edge detection and Hough transform.
@@ -95,6 +103,44 @@ The lane detection sequence consists of the following steps:
 - [ ] Add extended Kalman filter for sensor fusion
 - [ ] Migrate critical components to C++ for performance
 - [ ] Improve simulator physics
+
+
+---
+
+## Screenshots & Demo
+
+### Lane Detection Pipeline
+```
+Input Frame          Edge Detection       Lane Lines Found
+┌──────────┐        ┌──────────┐        ┌──────────┐
+│  Road    │  ───►  │ ░░░░░░░░ │  ───►  │  / Road \ │
+│ ──────── │  Canny │ ░░    ░░ │ Hough  │ /────────\│
+│/        \│        │░░      ░░│        │/          \│
+└──────────┘        └──────────┘        └──────────┘
+```
+
+### 2D Simulator
+```
+┌───────────────────────────────────┐
+│  AutoPilot - 2D Simulator        │
+│  ┌─────────────────────────────┐ │
+│  │    ══════════════           │ │
+│  │   ║   🚗 ←car  ║           │ │
+│  │    ══════╗══════            │ │
+│  │          ║     ★ waypoint   │ │
+│  │    ══════╝══════            │ │
+│  │   ║  obstacles  ║          │ │
+│  └─────────────────────────────┘ │
+│  Speed: 2.3 m/s | Steering: 5°  │
+│  Mode: [Auto] [Manual] [Pause]   │
+└───────────────────────────────────┘
+```
+
+### Live Demo
+> Run the simulator: `npm install && npm run dev`
+> Open `http://localhost:3000`
+> Toggle between manual (arrow keys) and autonomous mode!
+
 
 ## Contributing
 
