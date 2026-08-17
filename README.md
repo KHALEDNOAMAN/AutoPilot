@@ -1,139 +1,105 @@
-<div align="center">
+# AutoPilot
 
-# 🏎️ AutoPilot
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
+[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)]()
 
-**Autonomous RC Car with A* Path Planning, PID Lane Following, Obstacle Avoidance & Interactive 2D Simulator**
+An autonomous vehicle system combining computer vision, path planning, and PID control. Features real ESP32 firmware and an interactive 2D web simulator.
 
-[![C++](https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=cplusplus&logoColor=white)](https://isocpp.org/)
-[![ESP32](https://img.shields.io/badge/ESP32-E7352C?style=for-the-badge&logo=espressif&logoColor=white)](https://www.espressif.com/)
-[![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+## Key Features
 
-**Real ESP32 firmware** for autonomous driving + **Playable 2D simulator** to test algorithms before deployment.
+- **Lane Detection:** Utilizes Canny edge detection and Hough transform.
+- **A\* Path Planning:** Computes optimal routes with dynamic obstacle avoidance.
+- **PID Steering Controller:** Smooth and continuous course correction.
+- **Camera Calibration Pipeline:** Distortion removal and perspective transformation.
+- **ESP32 Motor Control Firmware:** Embedded software for real-time actuation.
+- **Interactive 2D Simulator:** Playable web game to test algorithms.
+- **Real-Time Telemetry Dashboard:** Monitoring for sensor data and control outputs.
 
-[🎮 **Try the Simulator**](https://auto-pilot-elnoaman.vercel.app) | [📄 **Wiring Guide**](docs/wiring_diagram.md)
+## Architecture
 
-</div>
+`	ext
+Camera â†’ Preprocessing â†’ Lane Detection â†’ Path Planning (A*) â†’ PID Steering â†’ Motor Control
+                                                 â†‘
+                                           Obstacle Map
+`
 
----
+## Tech Stack
 
-## 🏗️ Architecture — Software-in-the-Loop
+| Component | Technology |
+| --- | --- |
+| **Computer Vision** | Python, OpenCV |
+| **Path Planning** | Python |
+| **Embedded System** | ESP32 (C/C++) |
+| **Simulator** | TypeScript, Canvas API |
 
-```
-┌──────────────────────────────────────────────────┐
-│                   AutoPilot                       │
-├───────────────────┬──────────────────────────────┤
-│   /firmware       │     /simulator               │
-│   ESP32 C++ Code  │     2D Canvas Game           │
-│                   │                              │
-│  ┌─────────────┐  │  ┌──────────────────────────┐│
-│  │ PID Steering│◄─┼──│  Same PID Algorithm      ││
-│  │ Controller  │  │  │  (TypeScript port)       ││
-│  └─────────────┘  │  └──────────────────────────┘│
-│  ┌─────────────┐  │  ┌──────────────────────────┐│
-│  │ A* Path     │  │  │  Same A* Algorithm       ││
-│  │ Planning    │  │  │  (visible on mini-map)   ││
-│  └─────────────┘  │  └──────────────────────────┘│
-│  ┌─────────────┐  │  ┌──────────────────────────┐│
-│  │ HC-SR04     │  │  │  Simulated Ray-Cast      ││
-│  │ Ultrasonics │  │  │  Sensors                 ││
-│  └─────────────┘  │  └──────────────────────────┘│
-├───────────────────┴──────────────────────────────┤
-│  Test in simulator → Flash to real ESP32 car     │
-└──────────────────────────────────────────────────┘
-```
+## How It Works
 
----
+1. **Lane Detection Pipeline:** The input camera feed is transformed to a bird's-eye view. Edge detection and Hough transforms identify lane boundaries.
+2. **Path Planning (A\*):** Given a global map and obstacles, the A* algorithm continuously calculates the optimal, collision-free trajectory.
+3. **PID Control:** The difference between the vehicle's current heading and the target path generates an error signal. The PID controller adjusts steering angle to minimize this error.
 
-## 🎮 Simulator Controls
+## Getting Started
 
-| Key | Action |
-|-----|--------|
-| W / ↑ | Accelerate |
-| S / ↓ | Brake / Reverse |
-| A / ← | Steer left |
-| D / → | Steer right |
-| Space | Handbrake |
-| Tab | Toggle Autopilot ON/OFF |
-| M | Toggle mini-map |
-| V | Toggle sensor visualization |
-| R | Reset car position |
-| 1-3 | Change maps |
+### Prerequisites
 
----
+- Python 3.8+
+- OpenCV
+- Node.js (for the simulator)
 
-## 🔧 Firmware — Real Hardware
+### Setup
 
-### Components
+1. **Clone the repository:**
+   ``bash
+   git clone https://github.com/KHALEDNOAMAN/AutoPilot.git
+   cd AutoPilot
+   ``
 
-| Component | Model | Purpose |
-|-----------|-------|---------|
-| Microcontroller | ESP32 DevKit | Main controller + WiFi |
-| Ultrasonic Front | HC-SR04 | Forward distance |
-| Ultrasonic Left | HC-SR04 | Left distance |
-| Ultrasonic Right | HC-SR04 | Right distance |
-| Line Sensors | 5x TCRT5000 | Lane following |
-| Motor Driver | L298N | DC motor control |
-| DC Motor | TT Motor | Drive wheels |
-| Servo Motor | SG90 | Steering |
-| Battery | 7.4V 2S LiPo | Power |
+2. **Install Python dependencies:**
+   ``bash
+   pip install -r requirements.txt
+   ``
 
-### Driving Modes
+3. **Run the Simulator:**
+   ``bash
+   cd simulator
+   npm install
+   npm run dev
+   ``
 
-| Mode | Description |
-|------|-------------|
-| **Manual** | Bluetooth/WiFi remote control via phone |
-| **Line Follow** | PID-based line tracking with 5 sensors |
-| **Obstacle Avoid** | Ultrasonic-based reactive avoidance |
-| **Autonomous** | A* path planning + PID navigation |
+## Project Structure
 
----
+`
+AutoPilot/
+â”œâ”€â”€ cv/                 # Computer vision and lane detection
+â”œâ”€â”€ planning/           # A* path planning implementation
+â”œâ”€â”€ control/            # PID controller
+â”œâ”€â”€ firmware/           # ESP32 C/C++ code
+â”œâ”€â”€ simulator/          # TypeScript/Canvas web simulator
+â”œâ”€â”€ tests/              # Unit and integration tests
+â””â”€â”€ README.md
+`
 
-## 🚀 Quick Start
+## Lane Detection Pipeline
 
-### Simulator (no hardware needed)
-```bash
-cd simulator
-npm install
-npm run dev
-# Open http://localhost:5173 — drive the car! 🏎️
-```
+The lane detection sequence consists of the following steps:
+1. **Camera Calibration:** Correcting lens distortion.
+2. **Perspective Warp:** Transforming the image to a top-down, bird's-eye view.
+3. **Color Filtering:** Isolating road markings.
+4. **Edge Detection:** Applying the Canny operator.
+5. **Line Extraction:** Using Hough transform to define lane boundaries.
 
-### Firmware (with hardware)
-```bash
-pip install platformio
-cd firmware
-pio run -t upload    # Flash to ESP32
-pio device monitor   # Serial monitor
-```
+## Roadmap
 
----
+- [ ] Implement robust object detection (YOLO)
+- [ ] Add extended Kalman filter for sensor fusion
+- [ ] Migrate critical components to C++ for performance
+- [ ] Improve simulator physics
 
-## 📊 Algorithms
+## Contributing
 
-### A* Path Planning
-```
-1. Create grid map from environment
-2. Set start = car position, goal = destination
-3. For each cell, calculate: f(n) = g(n) + h(n)
-   g(n) = cost from start to n
-   h(n) = Manhattan distance to goal
-4. Expand lowest f(n) node, repeat until goal reached
-5. Trace back optimal path
-```
+Contributions are welcome. Please open an issue first to discuss what you would like to change. 
 
-### PID Lane Centering
-```
-Error = Lane_Center - Car_Position
-Steering = Kp × Error + Ki × ∫Error + Kd × dError/dt
-```
+## License
 
----
-
-## 📝 License
-MIT License — see [LICENSE](LICENSE) file.
-
-<div align="center">
-Built by [Khaled Noaman](https://github.com/KHALEDNOAMAN) — Computer Engineering Student 🚀
-</div>
+This project is licensed under the MIT License.
